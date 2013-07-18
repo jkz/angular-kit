@@ -1,4 +1,6 @@
-angular.module( 'kit', [
+angular.module('kit', [
   'responsive',
-  'rest'
+  'rest',
+  'markdown',
+  'fuzzy'
 ]);
