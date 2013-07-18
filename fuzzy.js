@@ -161,6 +161,23 @@ angular.module('fuzzy', [])
         }
     };
 })
+.factory('fuzzyFilterFactory', function ($time) {
+    return function () {
+        var pairs = Array.prototype.slice.call(arguments);
+        return function (timestamp) {
+            var moment = new Date(timestamp);
+            var delta = Math.abs(new Date() - moment);
+            var format = pairs[pairs.length - 1][0];
+            pairs.some(function (el) {
+                if (delta < el[0]) {
+                    format = el[1];
+                    return true;
+                }
+            })
+            return $time.format(moment, format);
+        }
+    }
+})
 .filter('fuzzydelta', function ($time) {
   return function (then, now) {
     var is_now = !!now;
@@ -194,16 +211,13 @@ angular.module('fuzzy', [])
   };
 })
 
-.filter('fuzzymoment', function ($time) {
-        return function (moment) {
-        moment = new Date(moment);
-        var delta = Math.abs(new Date() - moment),
-            format = delta < $time.DAY && 'HH:MM' ||
-                     delta < $time.WEEK && 'dddd' ||
-                     delta < $time.YEAR && 'dd MMMM' ||
-                     'MMMM \'yy';
-        return $time.format(moment, format);
-    };
+.filter('fuzzymoment', function ($time, fuzzyFilterFactory) {
+    return fuzzyFilterFactory(
+        [$time.DAY, 'HH:MM'],
+        [$time.WEEK, 'dddd'],
+        [$time.YEAR, 'dd MMMM'],
+        ['MMMM']
+    );
 })
 ;
 
