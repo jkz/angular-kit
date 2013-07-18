@@ -15,7 +15,6 @@ angular.module('rest', [
 
         data.api = {
           get: function (params, callback) {
-              console.log('EMMER', params, options.uid);
             data.current = data.index[params[options.uid]];
           },
           query: function (params, callback) {
@@ -24,21 +23,18 @@ angular.module('rest', [
                   if (resp.status != 200) {
                   } else {
                     data.list = resp.data;
-                    console.log('DATA', resp.data);
                     angular.forEach(resp.data, function (value) {
                       data.index[value[options.uid]] = value;
                     });
                   }
                 })
               .error(function (resp) {
-                console.log('ERROR');
+                console.log('ERROR', resp);
               });
           }
         };
 
-        console.log('QUERY');
         data.api.query();
-        console.log('DONE');
 
         return data;
       }
