@@ -44,7 +44,7 @@ angular.module('fuzzy', [])
           minute: {value: MINUTE, single: 'minute', plural: 'minutes' },
           hour: {value: HOUR, single: 'hour', plural: 'hours'},
           day: {value: DAY, single: 'day', plural: 'days'},
-          week: {single: WEEK, single: 'week', plural: 'weeks'},
+          week: {value: WEEK, single: 'week', plural: 'weeks'},
           month: {value: MONTH, single: 'month', plural: 'months'},
           year: {value: YEAR, single: 'year', plural: 'years'},
           decade: {value: DECADE, single: 'decade', plural: 'decades'},
@@ -196,7 +196,7 @@ angular.module('fuzzy', [])
 
 .filter('fuzzymoment', function ($time) {
         return function (moment) {
-        moment = new Date(moment)
+        moment = new Date(moment);
         var delta = Math.abs(new Date() - moment),
             format = delta < $time.DAY && 'HH:MM' ||
                      delta < $time.WEEK && 'dddd' ||
